@@ -2,6 +2,11 @@
 Tienda Online, MVC, librerías de clases, en ASP.Net C#.
 
 
+## ¿Qué hace la aplicación?
+
+La aplicación muestra una pagina Web de compra y venta de productos de la canasta familiar.
+
+
 ## ¿Qué muestra la aplicación?
 
 En la Página web muestra diferentes formularios funcionales del SupermercadoOnline. En ``` cd SuperMercadoOnline/WebSite/Presentacion``` muestra los .aspx o formularios de cada rol de la aplicación como el administrador, cajero y cliente. El administrador puede agregar cajeros, productos, proveedores, etc., el cajero puede consultar los productos, generar el recibo, etc., y por ultimo el cliente agrega productos al carrito de compras, escribe un mensaje, etc.
