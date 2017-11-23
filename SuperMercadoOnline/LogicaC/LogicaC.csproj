@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{157B3576-ADFA-4B61-89A3-22BECDAF2F2E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LogicaC</RootNamespace>
+    <AssemblyName>LogicaC</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LAAdquirirProducto.cs" />
+    <Compile Include="LAAgregarCajero.cs" />
+    <Compile Include="LAAgregarProducto.cs" />
+    <Compile Include="LAAgregarProveedor.cs" />
+    <Compile Include="LActualizarDatos.cs" />
+    <Compile Include="LAMensajes.cs" />
+    <Compile Include="LAUtilidad.cs" />
+    <Compile Include="LCajero.cs" />
+    <Compile Include="LCajeroConsulta.cs" />
+    <Compile Include="LCajeroRecibo.cs" />
+    <Compile Include="LCliente.cs" />
+    <Compile Include="LCatalogo.cs" />
+    <Compile Include="LClienteRecibo.cs" />
+    <Compile Include="LClienteCarrito.cs" />
+    <Compile Include="LClienteMensaje.cs" />
+    <Compile Include="LClienteProductos.cs" />
+    <Compile Include="LContactenos.cs" />
+    <Compile Include="LLogin.cs" />
+    <Compile Include="LMac.cs" />
+    <Compile Include="LMaster.cs" />
+    <Compile Include="Logica_idiomaControl.cs" />
+    <Compile Include="LSesionAdministrador.cs" />
+    <Compile Include="LOlvidoContraseña.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataC\DataC.csproj">
+      <Project>{6A9B0004-EEAE-4650-9D73-86774A8EE34E}</Project>
+      <Name>DataC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EncapsularC\EncapsularC.csproj">
+      <Project>{109A43AD-3824-46CB-9179-26C84270F6FC}</Project>
+      <Name>EncapsularC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UtilitarioC\UtilitarioC.csproj">
+      <Project>{382D8850-09A3-4BEB-B277-1C96D4925598}</Project>
+      <Name>UtilitarioC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

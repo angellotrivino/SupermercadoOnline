@@ -1,0 +1,5 @@
+Hay que agregar las dos bases de datos tanto la de postgres como la de mysql, para que el proyocte funcione
+
+
+parte Mysql = multiidioma
+y el resto del proyecto postgres

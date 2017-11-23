@@ -1,0 +1,172 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="~/LogicaPresentacion/Plantilla1.master.cs" Inherits="Presentacion_Plantilla1" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Página de inicio</title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+
+        .style2
+        {
+            width: 101%;
+            height: 48px;
+        }
+        .style12
+        {
+            height: 75px;
+            text-align: center;
+        }
+        .style10
+        {
+            width: 7%;
+            height: 76px;
+        }
+        .style11
+        {
+            width: 10%;
+            height: 76px;
+        }
+        .style5
+        {
+            width: 10%;
+            height: 76px;
+        }
+        .style8
+        {
+            height: 76px;
+            width: 196px;
+        }
+        a {
+	outline:none;
+}
+a {
+	color:#d86ad5;
+	text-decoration:underline;
+}
+        .style13
+        {
+            width: 12%;
+            height: 76px;
+        }
+        .style14
+        {
+            width: 15%;
+            height: 76px;
+        }
+        .style15
+        {
+            height: 76px;
+            text-align: center;
+        }
+        .style16
+        {
+            width: 100%;
+        }
+        .style19
+        {
+            height: 75px;
+            text-align: center;
+            width: 30%;
+        }
+        .style20
+        {
+            width: 30%;
+        }
+        .style21
+        {
+            width: 60%
+        }
+    </style>
+</head>
+<body background="../Imagenes/ImagenesWeb/fondo1.jpg">
+    <form id="form1" runat="server">
+    <div>
+          <table class="style2">
+              <tr>
+                  <td class="style19">
+                      <asp:Image ID="I_Supermercado" runat="server" 
+                          ImageUrl="~/Imagenes/ImagenesWeb/Logo.jpg" Height="173px" Width="231px" />
+                  </td>
+                  <td class="style12">
+                      <asp:Image ID="I_Banner" runat="server" Height="135px" 
+                          ImageUrl="~/Imagenes/ImagenesWeb/banner-animado.gif" Width="100%" />
+                  </td>
+              </tr>
+              </table>
+          <p>
+          </p>
+          <table class="style16">
+              <tr>
+                  <td bgcolor="Black" style="text-align: right">
+                      <asp:Label ID="L_FechaMensaje" runat="server" Font-Names="jokerman" ForeColor="White" 
+                          Text="Fecha Actual: " BackColor="Black"></asp:Label>
+                  &nbsp;<asp:Label ID="LB_Hora_Fecha_Actual" runat="server" Font-Names="jokerman" 
+                          ForeColor="White" BackColor="Black"></asp:Label>
+                  &nbsp;</td>
+              </tr>
+          </table>
+          <table class="style2">
+              <tr>
+                  <td class="style15">
+                      <asp:Image ID="I_Usuario" runat="server" Height="69px" Visible="False" 
+                          Width="85px" ImageUrl="~/Imagenes/ImagenesWeb/imagen_vacia.png" />
+                  </td>
+                  <td class="style10">
+                      <asp:Label ID="L_TUsuario" runat="server" Font-Names="jokerman" ForeColor="Red" 
+                          Text="USUARIO: " Visible="False" ></asp:Label>
+                  </td>
+                  <td class="style11">
+                      <asp:Label ID="L_Usuario" runat="server" Font-Names="jokerman" ForeColor="Black" 
+                          Visible="False"></asp:Label>
+                  </td>
+                  <td class="style5">
+                      <asp:Label ID="L_TEMail" runat="server" Font-Names="jokerman" ForeColor="Red" 
+                          Text="EMAIL: " Visible="False"></asp:Label>
+                  </td>
+                  <td class="style14">
+                      <asp:Label ID="L_EMail" runat="server" Font-Names="jokerman" ForeColor="Black" 
+                          Visible="False"></asp:Label>
+                  </td>
+                  <td class="style14">
+                      <asp:Label ID="L_TTipoUsuario" runat="server" Font-Names="jokerman" ForeColor="Red" 
+                          Text="TIPO DE USUARIO: " Visible="False"></asp:Label>
+                  </td>
+                  <td class="style13">
+                      <asp:Label ID="L_TipoUsuario" runat="server" Font-Names="jokerman" ForeColor="Black" 
+                          Visible="False"></asp:Label>
+                  </td>
+                  <td class="style8">
+                      <asp:LinkButton ID="LB_CerrarSesion" runat="server" Font-Size="Medium" 
+                          onclick="LB_CerrarSesion_Click" Visible="False" Font-Names="jokerman">Cerrar 
+                      session</asp:LinkButton>
+                  </td>
+              </tr>
+              </table>
+          <p>
+          </p>
+    </div>
+    <table class="style16">
+        <tr>
+            <td class="style20">
+                &nbsp;</td>
+            <td class="style21">
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+                  </td>
+            <td>
+                &nbsp;</td>
+        </tr>
+    </table>
+    </form>
+    <table class="style16">
+        <tr>
+            <td bgcolor="Black">
+                &nbsp;</td>
+        </tr>
+    </table>
+    </body>
+</html>

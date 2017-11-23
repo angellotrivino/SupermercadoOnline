@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{382D8850-09A3-4BEB-B277-1C96D4925598}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UtilitarioC</RootNamespace>
+    <AssemblyName>UtilitarioC</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataSet\Pedido.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Pedido.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSet\Recibo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Recibo.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSet\reporte.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>reporte.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSet\Utilidad.cs">
+      <DependentUpon>Utilidad.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataSet\Utilidad.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Utilidad.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UALL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataSet\Pedido.xsc">
+      <DependentUpon>Pedido.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet\Pedido.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Pedido.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataSet\Pedido.xss">
+      <DependentUpon>Pedido.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet\Recibo.xsc">
+      <DependentUpon>Recibo.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet\Recibo.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Recibo.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataSet\Recibo.xss">
+      <DependentUpon>Recibo.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet\reporte.xsc">
+      <DependentUpon>reporte.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet\reporte.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>reporte.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataSet\reporte.xss">
+      <DependentUpon>reporte.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet\Utilidad.xsc">
+      <DependentUpon>Utilidad.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet\Utilidad.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Utilidad.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataSet\Utilidad.xss">
+      <DependentUpon>Utilidad.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
