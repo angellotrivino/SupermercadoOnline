@@ -4,7 +4,7 @@ Tienda Online, MVC, librerías de clases, en ASP.Net C#.
 
 ## ¿Qué hace la aplicación?
 
-La aplicación muestra una pagina Web de compra y venta de productos de la canasta familiar.
+La pagina Web muestra una plataforma de compra y venta de productos de la canasta familiar.
 
 
 ## ¿Qué muestra la aplicación?
