@@ -4,7 +4,49 @@ Tienda Online, MVC, librerías de clases, en ASP.Net C#.
 
 ## ¿Qué hace la aplicación?
 
-La pagina Web muestra una plataforma de compra y venta de productos de la canasta familiar.
+La pagina Web muestra una plataforma de compra y venta de productos de la canasta familiar. En la imagen-1 se muestra el catalogo de productos disponibles.
+
+![img-1](Images_Readme/Prueba_1.png)
+
+En la plataforma Web se puede registrar cualquier usuario con los datos requeridos: nombre, apellidos, correo, etc. (imagen-2) Y además de ingresar, cómo usuario usuario ya registrado.
+
+![img-2](Images_Readme/Prueba_2.png)
+
+Al ingresar se muestra una alerta de ingreso según el rol (administrador, cajero o cliente), en este caso el rol es cliente. (Imagen-3)
+
+![img-3](Images_Readme/Prueba_3.png)
+
+El cliente tiene varias opciones: ver su carrito de compras o comprar productos, cómo se muestra en la imagen-4.
+
+![img-4](Images_Readme/Prueba_4.png)
+
+En la imagen-5 se muestra el formulario del carrito de compras, el cual esta vacio.
+
+![img-5](Images_Readme/Prueba_5.png)
+
+En la imagen-6 se muestra los productos disponibles en la tienda online, con su respectivo nombre, cantidad, foto y precio. En la imagen se observa que se compra dos productos de café.
+
+![img-6](Images_Readme/Prueba_6.png)
+
+Al regresar al formulario del carrito, se observa la cantidad del producto que se compro anteriormente. Para apartarlo presionamos en "APARTAR PRODUCTOS". (imagen-7)
+
+![img-7](Images_Readme/Prueba_7.png)
+
+Antes de continuar, en el carrito de compras se puede modificar la cantidad del producto que se va a comprar, por si el cliente quiere disminuir o aumentar la cantidad, por pura decisión repentina. (imagen-8)
+
+![img-8](Images_Readme/Prueba_8.png)
+
+El cajero se encarga de entregar los productos apartados. (imagen-8)
+
+![img-9](Images_Readme/Prueba_9.png)
+
+Por medio del número de cedula consulta los pedidos y vende los productos. (imagen-10)
+
+![img-10](Images_Readme/Prueba_10.png)
+
+Finalmente se completa la compra. (imagen-11)
+
+![img-11](Images_Readme/Prueba_11.png)
 
 
 ## ¿Qué muestra la aplicación?

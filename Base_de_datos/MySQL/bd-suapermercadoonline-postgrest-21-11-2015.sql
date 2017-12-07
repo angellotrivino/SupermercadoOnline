@@ -1,5 +1,5 @@
 /*
-SQLyog Enterprise - MySQL GUI v8.1 
+SQLyog Enterprise - MySQL GUI v8.1
 MySQL - 6.0.11-alpha-community : Database - bd_supermercado
 *********************************************************************
 */
@@ -317,28 +317,28 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_AdquirirProducto`(in _idProducto_proveedor int, in _precioProductoV DOUBLE,in _cantidadProducto int,IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
+
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Modificar Adquirir Producto';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('id',',', 'precioProductoV',',', 'cantidadProducto');
 	SET _antes =  (SELECT CONCAT(idProducto_proveedor,',',precioProductoV,',',cantidadProducto) FROM producto_proveedor WHERE idProducto_proveedor=_idProducto_proveedor);
 	SET _ahora =  CONCAT(_idProducto_proveedor,',', _precioProductoV,',', _cantidadProducto);
-	
-	
-	UPDATE producto_proveedor 
+
+
+	UPDATE producto_proveedor
 	SET
-	precioProductoV = _precioProductoV , 
+	precioProductoV = _precioProductoV ,
 	cantidadProducto = _cantidadProducto
-	
+
 	WHERE
 	idProducto_proveedor = _idProducto_proveedor ;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_idProducto_proveedor,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -351,7 +351,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_CarritoLiberarProductos`()
 BEGIN
-    
+
     SELECT * from pedido_producto;
     END */$$
 DELIMITER ;
@@ -364,9 +364,9 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ClientePedidos`(in _idCliente int)
 BEGIN
-    SELECT DATE(fechaPedido) AS fechaPedido FROM pedido p, pedido_producto pp WHERE p.idEstadoPedido = 1 AND pp.idPedido = p.idPedido 
+    SELECT DATE(fechaPedido) AS fechaPedido FROM pedido p, pedido_producto pp WHERE p.idEstadoPedido = 1 AND pp.idPedido = p.idPedido
     AND pp.idCliente = _idCliente AND p.idCliente = _idCliente order by fechaPedido;
-  
+
     END */$$
 DELIMITER ;
 
@@ -378,34 +378,34 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ComprarProductos`(in _idPedido int,IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
+
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
 	declare _idEstado int;
-	
-	
+
+
 	set _idEstado = (SELECT idEstadoPedido from pedido where _idPedido=idPedido);
 	SET _accion = 'Comprar';
 	SET _tabla = 'Cliente';
 	SET _campos = CONCAT('idFactura',',', 'idCliente',',', 'idProveedor',',','unidadesProducto',',','fechaReserva');
 	SET _antes = '';
 	SET _ahora = (SELECT CONCAT(idPedido, ',', idCliente, ',',idProducto, ',', idProveedor,',',unidadesProducto) FROM pedido_producto WHERE idPedido=_idPedido);
-	
+
 	if _idEstado=2
 	then
-	UPDATE pedido 
+	UPDATE pedido
 	SET
 	idEstadoPedido = 1
-	
+
 	WHERE
 	idPedido = _idPedido ;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_idPedido,_ip,_mac,_campos,_antes,_ahora);
-	
-	
+
+
 	end if;
     END */$$
 DELIMITER ;
@@ -423,13 +423,13 @@ BEGIN
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Mensaje';
 	SET _tabla = 'cliente';
 	SET _campos = CONCAT('nombre',',', 'email',',', 'mensaje');
 	SET _antes =  '';
 	SET _ahora = CONCAT(_usuario,',',_email,',',_mensaje);
-	
+
 	INSERT INTO contactenos
 	(
 	nombre,
@@ -441,10 +441,10 @@ BEGIN
 	_usuario,
 	_email,
 	_mensaje
-	); 
-	
+	);
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
@@ -462,7 +462,7 @@ componente,
 texto,
 id_idioma
 )
-SELECT 
+SELECT
 id_formulario,
 componente,
 texto,
@@ -480,7 +480,7 @@ DELIMITER $$
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_CREAR_IDIOMA`(in _nombre varchar (1000),in _terminacion varchar(1000))
 BEGIN
 INSERT INTO idiomas
-	(nombre, 
+	(nombre,
 	terminacion
 	)
 	VALUES
@@ -516,7 +516,7 @@ direccion,
 telefono
 )
 (
-select 
+select
 usuario,
 direccion,
 telefono
@@ -548,13 +548,13 @@ DELIMITER $$
 BEGIN
 	SELECT 	0 as idProducto,
 		'--Seleccione--' as nombreProducto
-		
+
 		union all
-		
+
 		SELECT idProducto, nombreProducto
-		
+
 		from producto order by nombreProducto;
-	 
+
     END */$$
 DELIMITER ;
 
@@ -566,7 +566,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_EliminarCarrito`(in _idPedido int, IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-	
+
 	DECLARE _id INT;
 	DECLARE _unidades INT;
 	DECLARE _idProveedor INT;
@@ -576,8 +576,8 @@ BEGIN
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
-	 	
+
+
 	SET _id = _idPedido;
 	set _unidades = (SELECT unidadesProducto FROM pedido_producto WHERE idPedido=_idPedido);
 	SET _idProveedor = (SELECT idProveedor FROM pedido_producto WHERE idPedido=_idPedido);
@@ -587,23 +587,23 @@ BEGIN
 	SET _campos = CONCAT('idPedido',',', 'idProducto',',', 'idProveedor',',', 'unidadesProducto');
 	SET _antes =  (SELECT CONCAT(idPedido,',',idProducto,',',idProveedor,',',unidadesProducto) FROM pedido_producto WHERE idPedido=_idPedido);
 	SET _ahora = '';
-	
-	UPDATE producto_proveedor 
+
+	UPDATE producto_proveedor
 	SET
 	cantidadProducto = cantidadProducto + _unidades
-	
+
 	WHERE
 	idProducto = _idProducto AND
 	idProveedor = _idProveedor;
-	
-	DELETE FROM pedido_producto 
+
+	DELETE FROM pedido_producto
 	WHERE
 	idPedido = _idPedido ;
-	
+
 	DELETE FROM pedido WHERE idPedido=_idPedido;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
@@ -615,7 +615,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_EliminarCarritoCajero`(in _idCliente int, in _idPedido int, IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-	
+
 	DECLARE _id INT;
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
@@ -625,8 +625,8 @@ BEGIN
 	declare _cantidad int;
 	DECLARE _idProveedor INT;
 	DECLARE _idProducto INT;
-	
-	 	
+
+
 	SET _id = _idPedido;
 	SET _accion = 'Eliminar Carrito Cajero';
 	SET _tabla = 'cajero';
@@ -636,21 +636,21 @@ BEGIN
 	set _cantidad =(SELECT unidadesProducto FROM pedido_producto WHERE idPedido=_idPedido);
 	SET _idProveedor =(SELECT idProveedor FROM pedido_producto WHERE idPedido=_idPedido);
 	SET _idProducto =(SELECT idProducto FROM pedido_producto WHERE idPedido=_idPedido);
-	
-	DELETE FROM pedido_producto 
+
+	DELETE FROM pedido_producto
 	WHERE
 	idPedido = _idPedido ;
 	DELETE FROM pedido WHERE idPedido=_idPedido;
-	
-	UPDATE producto_proveedor 
+
+	UPDATE producto_proveedor
 	SET
-	
+
 	cantidadProducto = cantidadProducto + _cantidad
-	
+
 	WHERE
 	idProveedor = _idProveedor AND idProducto = _idProducto;
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
@@ -668,17 +668,17 @@ BEGIN
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
-	 	
+
+
 	SET _id = _idProducto;
 	SET _accion = 'Eliminar Producto';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('id',',', 'nombre',',', 'descripcion',',', 'imagen');
 	SET _antes =  (SELECT CONCAT(idProducto,',',nombreProducto,',',descripcionProducto,',',imagenProducto) FROM producto WHERE idProducto=_idProducto);
 	SET _ahora = '';
-	
+
 	DELETE from producto where idProducto=_idProducto;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -691,30 +691,30 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_EliminarProductosProveedor`(in _idProducto int,in _idProveedor int,IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-	
+
 	DECLARE _id INT;
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
-	 	
-	
+
+
+
 	SET _accion = 'Eliminar Productos Proveedor';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('id',',', 'nombreProducto',',', 'nombreProveedor',',', 'precioProducto');
 	SET _antes =  (SELECT CONCAT(pp.idProducto_proveedor, ',', p.nombreProducto, ',', pr.nombreProveedor, ',', pp.precioProducto)
-			FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto 
+			FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto
 			AND pr.idProveedor=_idProveedor AND p.idProducto=_idProducto);
 	SET _ahora = '';
-	set _id= (SELECT pp.idProducto_proveedor FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto 
+	set _id= (SELECT pp.idProducto_proveedor FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto
 			AND pr.idProveedor=_idProveedor AND p.idProducto=_idProducto);
-	
-	DELETE FROM producto_proveedor 
+
+	DELETE FROM producto_proveedor
 	WHERE
 	idProducto=_idProducto and idProveedor=_idProveedor ;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -741,23 +741,23 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_Loggin`(IN pass text, in Nom text, IN ip text, in mac TEXT)
 BEGIN
-	
+
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Ingresar';
 	SET _tabla = 'Visitante';
 	SET _campos = CONCAT('nickname',',', 'password');
 	SET _antes =  '';
 	SET _ahora = CONCAT(Nom,',',pass);
-	
+
  SELECT * FROM usuario where Nom= usuario.nickUsuario and pass = usuario.passUsuario;
- 
+
  CALL sp_seguridad(_accion,'visitante',_tabla,1,ip,mac,_campos,_antes,_ahora);
- 
+
     END */$$
 DELIMITER ;
 
@@ -770,18 +770,18 @@ DELIMITER $$
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_modificarIdioma`(in _id_formulario int, in _componente varchar(1000),
                                                                  in _texto varchar(1000), in _id_idioma int)
 BEGIN
-    
-    
-        UPDATE componentes 
+
+
+        UPDATE componentes
 	SET
-	
+
 	texto = _texto
-		
+
 	WHERE
-	id_formulario = _id_formulario AND 
+	id_formulario = _id_formulario AND
 	componente = _componente AND
         id_idioma = _id_idioma;
-        
+
     END */$$
 DELIMITER ;
 
@@ -835,16 +835,16 @@ BEGIN
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
-	 	
+
+
 	SET _id = _idProveedor;
 	SET _accion = 'Eliminar Proveedor';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('idProveedor',',', 'nombreProveedor',',', 'direccionProveedor',',', 'telefonoProveedor',',', 'emailProveedor',',', 'logoProveedor');
 	SET _antes =  (SELECT CONCAT(idProveedor,',',nombreProveedor,',',direccionProveedor,',',telefonoProveedor,',',emailProveedor,',',logoProveedor) FROM proveedor WHERE idProveedor=_idProveedor);
 	SET _ahora = '';
-	
-	DELETE FROM proveedor 
+
+	DELETE FROM proveedor
 	WHERE
 	idProveedor = _idProveedor ;
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
@@ -859,15 +859,15 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_EliminarUsuario`(IN _idUsuario INT, IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-	
+
 	DECLARE _id INT;
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
-	 	
+
+
 	SET _id = _idUsuario;
 	SET _accion = 'Eliminar Usuario';
 	SET _tabla = 'Administrador';
@@ -876,8 +876,8 @@ BEGIN
 	SET _antes =  (SELECT CONCAT(idUsuario,',',nombresUsuario,',',apellidosUsuario,',',direccionUsuario,',',telefonoUsuario,',',idTipoUsuario
 		       ,',',emailUsuario,',',imagenUsuario,',',nickUsuario,',',passUsuario) FROM usuario WHERE idUsuario=_id);
 	SET _ahora = '';
-	
-	DELETE FROM usuario 
+
+	DELETE FROM usuario
 	WHERE
 	idUsuario= _id ;
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
@@ -892,12 +892,12 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_FiltroClientePedidos`(in _filtrofecha DATETIME, in _idCliente int)
 BEGIN
-    
-    
-    SELECT p.idPedido, DATE(fechaPedido) AS fechaPedido, nombreProducto, nombreProveedor, concat(nombresUsuario,'  ',apellidosUsuario) as nombreCliente, imagenUsuario, unidadesProducto, precioProductoV 
-    FROM pedido p, proveedor prove, pedido_producto pp, producto pr, usuario u, producto_proveedor ppr WHERE p.idEstadoPedido = 1 AND pp.idPedido = p.idPedido 
-    AND pp.idCliente = _idCliente AND p.idCliente = _idCliente AND pp.idProducto = pr.idProducto AND pp.idCliente = u.idUsuario 
-    AND ppr.idProducto = pp.idProducto AND ppr.idProveedor = pp.idProveedor and pp.idProveedor = prove.idProveedor 
+
+
+    SELECT p.idPedido, DATE(fechaPedido) AS fechaPedido, nombreProducto, nombreProveedor, concat(nombresUsuario,'  ',apellidosUsuario) as nombreCliente, imagenUsuario, unidadesProducto, precioProductoV
+    FROM pedido p, proveedor prove, pedido_producto pp, producto pr, usuario u, producto_proveedor ppr WHERE p.idEstadoPedido = 1 AND pp.idPedido = p.idPedido
+    AND pp.idCliente = _idCliente AND p.idCliente = _idCliente AND pp.idProducto = pr.idProducto AND pp.idCliente = u.idUsuario
+    AND ppr.idProducto = pp.idProducto AND ppr.idProveedor = pp.idProveedor and pp.idProveedor = prove.idProveedor
     and ppr.idProveedor = prove.idProveedor and date(fechaPedido) = Date(_filtrofecha);
     END */$$
 DELIMITER ;
@@ -916,39 +916,39 @@ BEGIN
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Insertar Cajero';
 	SET _tabla = 'Cajero';
 	SET _campos = CONCAT('cedula',',', 'nombres',',', 'apellidos',',', 'direccion',',', 'telefono',',', 'email',',',
 	 'usuario',',', 'user(Login)',',', 'password',',', 'imagen');
 	SET _antes = '';
 	SET _ahora = CONCAT(_id, ',', _nombres, ',', _apellidos, ',', _direccion, ',', _telefono, ',', _email, ',', 'Cajero', ',', _nick, ',', _pass, ',', _imagen);
-	
-	INSERT INTO usuario 
-	(idUsuario, 
-	nombresUsuario, 
-	apellidosUsuario, 
-	direccionUsuario, 
-	telefonoUsuario, 
-	emailUsuario, 
-	idTipoUsuario, 
-	nickUsuario, 
-	passUsuario, 
+
+	INSERT INTO usuario
+	(idUsuario,
+	nombresUsuario,
+	apellidosUsuario,
+	direccionUsuario,
+	telefonoUsuario,
+	emailUsuario,
+	idTipoUsuario,
+	nickUsuario,
+	passUsuario,
 	imagenUsuario
 	)
 	VALUES
-	(_id, 
-	_nombres, 
-	_apellidos, 
-	_direccion, 
-	_telefono, 
-	_email, 
-	_idTipo, 
-	_nick, 
-	_pass, 
+	(_id,
+	_nombres,
+	_apellidos,
+	_direccion,
+	_telefono,
+	_email,
+	_idTipo,
+	_nick,
+	_pass,
 	_imagen
 	);
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -961,20 +961,20 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_InsertarProducto`(in _id int,in _nombre text,in _descripcion text, in _imagen text, in _usser text, in _ip text, in _mac text)
 BEGIN
-    
+
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Insertar Producto';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('id',',', 'nombre',',', 'descripcion',',','imagen');
 	SET _antes = '';
 	SET _ahora = CONCAT(_id, ',', _nombre, ',',_descripcion, ',', _imagen);
-	
-INSERT INTO producto 
+
+INSERT INTO producto
 	(
 	idProducto,
 	nombreProducto,
@@ -984,11 +984,11 @@ INSERT INTO producto
 	VALUES
 	(
 	_id,
-	_nombre, 
+	_nombre,
 	_descripcion,
 	_imagen
 	);
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -1025,9 +1025,9 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_MostrarProveedor`()
 BEGIN
-	
-SELECT * from proveedor order by proveedor.nombreProveedor;	
-	
+
+SELECT * from proveedor order by proveedor.nombreProveedor;
+
     END */$$
 DELIMITER ;
 
@@ -1077,7 +1077,7 @@ DELIMITER $$
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtenercontactenos`()
 BEGIN
 	SELECT
-		nombre,email,mensaje	
+		nombre,email,mensaje
 	FROM
 		contactenos;
     END */$$
@@ -1091,30 +1091,30 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_InsertarProductoProveedor`(in _idProducto int,in _idProveedor int,in _nombreProveedor TEXT,in _nombreProducto text,in _precioProducto double,IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
+
 	DECLARE _id INT;
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _id = (SELECT CASE WHEN COUNT(idProducto_proveedor) > 0 THEN (MAX(idProducto_proveedor) + 1) ELSE 1 END FROM producto_proveedor);
 	SET _accion = 'Insertar Producto Proveedor';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('id',',', 'nombreProducto',',', 'nombreProveedor',',', 'precioProducto');
 	SET _antes = '';
 	SET _ahora = CONCAT(_id, ',', _nombreProducto, ',', _nombreProveedor, ',', _precioProducto);
-	INSERT INTO producto_proveedor 
-	(idProducto_proveedor, 
-	idProducto, 
-	idProveedor, 
+	INSERT INTO producto_proveedor
+	(idProducto_proveedor,
+	idProducto,
+	idProveedor,
 	precioProducto
 	)
 	VALUES
-	(_id, 
-	_idProducto, 
-	_idProveedor, 
+	(_id,
+	_idProducto,
+	_idProveedor,
 	_precioProducto
 	);
            CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
@@ -1129,36 +1129,36 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_InsertarProveedor`(in _id int, in _nombre TEXT,in _direccion text, in _telefono text, in _email text, in _logo text, in _usser text, in _ip TEXT, in _mac text)
 BEGIN
-	
+
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Insertar Proveedor';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('id',',', 'nombre',',', 'direccion',',', 'telefono',',', 'correo',',', 'logo');
 	SET _antes = '';
 	SET _ahora = CONCAT(_id, ',', _nombre, ',', _direccion, ',', _telefono, ',', _email, ',', _logo);
-    
-INSERT INTO proveedor 
+
+INSERT INTO proveedor
 	(idProveedor,
-	nombreProveedor, 
-	direccionProveedor, 
-	telefonoProveedor, 
-	emailProveedor, 
+	nombreProveedor,
+	direccionProveedor,
+	telefonoProveedor,
+	emailProveedor,
 	logoProveedor
 	)
 	VALUES
-	(_id, 
-	_nombre, 
-	_direccion, 
-	_telefono, 
-	_email, 
+	(_id,
+	_nombre,
+	_direccion,
+	_telefono,
+	_email,
 	_logo
 	);
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -1171,47 +1171,47 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_InsertarUsuario`(in _id int,in _nombres text,in _apellidos text,in _direccion text,in _telefono text,in _email text,in _idTipo int,in _nick text,in _pass text,in _imagen text, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
-	
+
+
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Insertar Visitante';
 	SET _tabla = 'Visitante';
 	SET _campos = CONCAT('cedula',',', 'nombres',',', 'apellidos',',', 'direccion',',', 'telefono',',', 'email',',', 'usuario',',', 'user(Login)',',', 'password',',', 'imagen');
 	SET _antes = '';
 	SET _ahora = CONCAT(_id, ',', _nombres, ',', _apellidos, ',', _direccion, ',', _telefono, ',', _email, ',', 'Cliente', ',', _nick, ',', _pass, ',', _imagen);
-	
-	INSERT INTO usuario 
-	(idUsuario, 
-	nombresUsuario, 
-	apellidosUsuario, 
-	direccionUsuario, 
-	telefonoUsuario, 
-	emailUsuario, 
-	idTipoUsuario, 
-	nickUsuario, 
-	passUsuario, 
+
+	INSERT INTO usuario
+	(idUsuario,
+	nombresUsuario,
+	apellidosUsuario,
+	direccionUsuario,
+	telefonoUsuario,
+	emailUsuario,
+	idTipoUsuario,
+	nickUsuario,
+	passUsuario,
 	imagenUsuario
 	)
 	VALUES
-	(_id, 
-	_nombres, 
-	_apellidos, 
-	_direccion, 
-	_telefono, 
-	_email, 
-	_idTipo, 
-	_nick, 
-	_pass, 
+	(_id,
+	_nombres,
+	_apellidos,
+	_direccion,
+	_telefono,
+	_email,
+	_idTipo,
+	_nick,
+	_pass,
 	_imagen
 	);
-	
+
 	CALL sp_seguridad(_accion,'Visitante',_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
@@ -1229,54 +1229,54 @@ BEGIN
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
     DECLARE _fechaAnt DATETIME;
     declare _fechaAct DATETIME;
     declare _idProveedor int;
     DECLARE _idProducto INT;
     declare _unidadesProducto int;
-    
+
     set _fechaAnt = (SELECT fechaPedido from pedido where idPedido=_idPedido);
     SET _fechaAct = (CURRENT_TIMESTAMP-INTERVAL 30 DAY);
     set _idProveedor = (SELECT idProveedor from pedido_producto WHERE idPedido=_idPedido);
     set _idProducto = (SELECT idProducto FROM pedido_producto WHERE idPedido=_idPedido);
     set _unidadesProducto = (SELECT unidadesProducto FROM pedido_producto WHERE idPedido=_idPedido);
-    
-    if _fechaAnt<=_fechaAct  
+
+    if _fechaAnt<=_fechaAct
     THEN
-    
+
 	SET _id = _idPedido;
 	SET _accion = 'Liberar Productos';
 	SET _tabla = 'Automatico';
 	SET _campos = CONCAT('Producto_proveedor',',', 'idProducto',',', 'idProveedor',',', 'cantidadProducto');
 	SET _antes =  (SELECT CONCAT('Producto_proveedor',',',_idProducto,',',_idProveedor,',',cantidadProducto)FROM producto_proveedor WHERE idProducto=_idProducto AND idProveedor=_idProveedor);
 	SET _ahora =  (SELECT CONCAT('Producto_proveedor',',',_idProducto,',',_idProveedor,',',cantidadProducto+_unidadesProducto)FROM producto_proveedor WHERE idProducto=_idProducto AND idProveedor=_idProveedor);
-   
-	UPDATE producto_proveedor 
+
+	UPDATE producto_proveedor
 	SET
-	 
+
 	cantidadProducto = cantidadProducto + _unidadesProducto
-	
+
 	WHERE
 	idProducto=_idProducto AND idProveedor=_idProveedor;
-		
+
 	CALL sp_seguridad(_accion,'automatico',_tabla,_id,'automatico','automatico',_campos,_antes,_ahora);
-	
+
 	SET _id = _idPedido;
 	SET _accion = 'Liberar Productos';
 	SET _tabla = 'Automatico';
 	SET _campos = CONCAT('factura_pedido',',','idFactura',',', 'idCliente',',', 'idProducto',',', 'idProveedor',',', 'unidadesProducto');
 	SET _antes =  (SELECT CONCAT('factura_pedido',',',idPedido,',',idCliente,',',idProducto,',',idProveedor,',',unidadesProducto) FROM pedido_producto WHERE idPedido=_idPedido);
 	SET _ahora = '';
-	
-	DELETE FROM pedido_producto 
+
+	DELETE FROM pedido_producto
 	WHERE
 	idPedido = _idPedido;
-	
+
 	DELETE FROM pedido
 	WHERE
 	idPedido = _idPedido;
-	
+
 	CALL sp_seguridad(_accion,'automatico',_tabla,_id,'automatico','automatico',_campos,_antes,_ahora);
     end if;
     END */$$
@@ -1299,13 +1299,13 @@ BEGIN
 			fp.idProducto,
 			fp.unidadesProducto,
 			fp.FechaReserva
-			
+
 		FROM
-			usuario u, factura_pedido fp 
-			
+			usuario u, factura_pedido fp
+
 			WHERE u.idUsuario=fp.idCliente
-		
-			
+
+
 		ORDER BY
 			2 ASC;
 	ELSE
@@ -1316,15 +1316,15 @@ BEGIN
 			fp.idProducto,
 			fp.unidadesProducto,
 			fp.FechaReserva
-			
+
 		FROM
 			usuario u, factura_pedido fp
-				
+
 		WHERE
 			u.idUsuario=fp.idCliente;
-			
+
 	END IF;
-			
+
     END */$$
 DELIMITER ;
 
@@ -1348,12 +1348,12 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ReciboCajero`(in _idVendedor int,in _idCliente int)
 BEGIN
-    
-    
-    SELECT nombresUsuario as nombreCajero, u.imagenUsuario as imagenCajero, p.nombreProducto, pp.precioProductoV as valorUnitario, fp.unidadesProducto as cantidad 
-    from usuario u inner join producto_proveedor pp INNER JOIN producto p inner join factura_pedido fp inner join factura f on 
+
+
+    SELECT nombresUsuario as nombreCajero, u.imagenUsuario as imagenCajero, p.nombreProducto, pp.precioProductoV as valorUnitario, fp.unidadesProducto as cantidad
+    from usuario u inner join producto_proveedor pp INNER JOIN producto p inner join factura_pedido fp inner join factura f on
     idUsuario=_idVendedor and f.idVendedor=_idVendedor AND f.idCliente=_idCliente and fp.idFactura=f.idFactura and fp.idProducto=pp.idProducto and fp.idProducto=p.idProducto and fp.idProveedor=pp.idProveedor;
-    
+
     END */$$
 DELIMITER ;
 
@@ -1365,7 +1365,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ModificarCarrito`(in _idPedido int, in _unidadesProducto int, IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
+
         DECLARE _id INT;
         DECLARE _unidadesActuales INT;
         DECLARE _idProveedor INT;
@@ -1375,7 +1375,7 @@ BEGIN
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _id = _idPedido;
 	set _unidadesActuales = (SELECT unidadesProducto from pedido_producto WHERE idPedido = _idPedido);
 	SET _idProveedor = (SELECT idProveedor FROM pedido_producto WHERE idPedido=_idPedido);
@@ -1385,39 +1385,39 @@ BEGIN
 	SET _campos = CONCAT('idPedido',',', 'idProducto',',', 'idProveedor',',', 'unidadesProducto');
 	SET _antes =  (SELECT CONCAT(idPedido,',',idProducto,',',idProveedor,',',unidadesProducto) FROM pedido_producto WHERE idPedido=_idPedido);
 	SET _ahora =  (SELECT CONCAT(idPedido,',',idProducto,',',idProveedor,',',_unidadesProducto) FROM pedido_producto WHERE idPedido=_idPedido);
-	
-	UPDATE pedido_producto 
+
+	UPDATE pedido_producto
 	SET
 	unidadesProducto = _unidadesProducto
-	
+
 	WHERE
 	idPedido = _idPedido ;
-	
-	
+
+
 	if _unidadesActuales < _unidadesProducto
 	then
-	
-	UPDATE producto_proveedor  
+
+	UPDATE producto_proveedor
 	SET
-	
+
 	cantidadProducto = cantidadProducto - (_unidadesProducto - _unidadesActuales)
-	
+
 	WHERE
 	idProveedor = _idProveedor AND idProducto = _idProducto;
-	
+
 	else
-	
-	UPDATE producto_proveedor  
+
+	UPDATE producto_proveedor
 	SET
-	
+
 	cantidadProducto = cantidadProducto + (_unidadesActuales - _unidadesProducto)
-	
+
 	WHERE
 	idProveedor = _idProveedor AND idProducto = _idProducto;
-	
+
 	end if;
-	
-	
+
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -1430,28 +1430,28 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ModificarCarritoCajero`(in _idCliente int,in _idFactura int, in _unidadesProducto int, IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
+
         DECLARE _id INT;
  	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _id = _idFactura;
 	SET _accion = 'Modificar Carrito Cajero';
 	SET _tabla = 'Cajero';
 	SET _campos = CONCAT('idFactura',',', 'idCliente',',', 'idProveedor',',', 'idProducto',',','unidadesProducto');
 	SET _antes =  (SELECT CONCAT(idFactura,',',idCliente,',',idProveedor,',',idProducto,',',unidadesProducto) FROM factura_pedido WHERE idFactura=_idFactura and idCliente=_idCliente);
 	SET _ahora =  (SELECT CONCAT(idFactura,',',idCliente,',',idProveedor,',',idProducto,',',_unidadesProducto) FROM factura_pedido WHERE idFactura=_idFactura AND idCliente=_idCliente);
-	
-	UPDATE factura_pedido 
+
+	UPDATE factura_pedido
 	SET
 	unidadesProducto = _unidadesProducto
-	
+
 	WHERE
 	idFactura = _idFactura;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -1464,29 +1464,29 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ModificarProducto`(IN _id INT, IN _nombre TEXT, in _descripcion text,IN _imagen TEXT, IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
+
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Modificar Producto';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('id',',', 'nombre',',', 'descripcion',',','imagen');
 	SET _antes =  (SELECT CONCAT(idProducto,',',nombreProducto,',',descripcionProducto,',',imagenProducto) FROM producto WHERE idProducto=_id);
 	SET _ahora =  CONCAT(_id,',', _nombre,',', _descripcion,',',_imagen);
-	
-	UPDATE producto 
+
+	UPDATE producto
 	SET
-	idProducto = _id , 
+	idProducto = _id ,
 	nombreProducto = _nombre ,
-	descripcionProducto = _descripcion, 
+	descripcionProducto = _descripcion,
 	imagenProducto = _imagen
-	
+
 	WHERE
 	idProducto = _id ;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -1499,40 +1499,40 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ModificarProductoProveedor`(IN _idProducto INT,IN _idProveedor INT,in _precioProducto DOUBLE,IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-	
+
 	declare _id int;
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
-	 	
-	
+
+
+
 	SET _accion = 'Modificar Productos Proveedor';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('id',',', 'nombreProducto',',', 'nombreProveedor',',', 'precioProducto');
 	SET _antes =  (SELECT CONCAT(pp.idProducto_proveedor, ',', p.nombreProducto, ',', pr.nombreProveedor, ',', pp.precioProducto)
-			FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto 
+			FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto
 			AND pr.idProveedor=_idProveedor AND p.idProducto=_idProducto);
-			
+
 	SET _ahora = (SELECT CONCAT(pp.idProducto_proveedor, ',', p.nombreProducto, ',', pr.nombreProveedor, ',', _precioProducto)
-			FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto 
+			FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto
 			AND pr.idProveedor=_idProveedor AND p.idProducto=_idProducto);
-			
-	SET _id= (SELECT pp.idProducto_proveedor FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto 
+
+	SET _id= (SELECT pp.idProducto_proveedor FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=_idProveedor AND pp.idProducto=_idProducto
 			AND pr.idProveedor=_idProveedor AND p.idProducto=_idProducto);
-			
-	
-	UPDATE producto_proveedor 
+
+
+	UPDATE producto_proveedor
 	SET
 	precioProducto = _precioProducto
-	
+
 	WHERE
 	idProducto=_idProducto and idProveedor=_idProveedor;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
@@ -1544,11 +1544,11 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ReciboCliente`(in _idVendedor int, in _idCliente int)
 BEGIN
-    
+
     SELECT nombresUsuario AS nombreCliente, u.imagenUsuario AS imagenCliente
-    FROM usuario u INNER JOIN producto_proveedor pp INNER JOIN producto p INNER JOIN factura_pedido fp INNER JOIN factura f ON 
+    FROM usuario u INNER JOIN producto_proveedor pp INNER JOIN producto p INNER JOIN factura_pedido fp INNER JOIN factura f ON
     idUsuario=_idCliente AND f.idCliente=_idCliente and f.idVendedor=_idVendedor AND fp.idFactura=f.idFactura AND fp.idProducto=pp.idProducto AND fp.idProducto=p.idProducto AND fp.idProveedor=pp.idProveedor;
-	
+
     END */$$
 DELIMITER ;
 
@@ -1560,7 +1560,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_RelacionProductoProveedor`()
 BEGIN
-    
+
     SELECT * FROM producto_proveedor pp INNER JOIN producto p INNER JOIN proveedor pr ON pp.idProveedor=pr.idProveedor AND pp.idProducto = p.idProducto order by pr.nombreProveedor;
     END */$$
 DELIMITER ;
@@ -1575,10 +1575,10 @@ DELIMITER $$
 BEGIN
 	DECLARE IDLog INT;
 	DECLARE fec DATETIME;
-	
+
 	SET fec = (SELECT CURRENT_TIMESTAMP);
 	SET IDLog = (SELECT CASE WHEN COUNT(id_seguridad) > 0 THEN (MAX(id_seguridad) + 1) ELSE 1 END FROM seguridad);
-	
+
 	INSERT INTO seguridad(id_seguridad,accion,fecha,usuario,tabla,id_registro,ip,mac_address,nom_Campo_mod,valor_ant_campo,nuevo_valor_campo)
 			VALUES(IDLog,Acc,fec,Usu,Tab,Reg,I,Mac,Nombre,Anterior,Nuevo) ;
     END */$$
@@ -1592,32 +1592,32 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ModificarProveedor`(in _idProveedor int, IN _nombre TEXT,IN _direccion TEXT, IN _telefono TEXT, IN _email TEXT, IN _logo TEXT, IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
+
 	declare _id int;
  	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	set _id = _idProveedor;
 	sET _accion = 'Modificar Proveedor';
 	SET _tabla = 'Administrador';
 	SET _campos = CONCAT('idProveedor',',', 'nombreProveedor',',', 'direccionProveedor',',', 'telefonoProveedor',',', 'emailProveedor',',', 'logoProveedor');
 	SET _antes =  (SELECT CONCAT(idProveedor,',',nombreProveedor,',',direccionProveedor,',',telefonoProveedor,',',emailProveedor,',',logoProveedor) FROM proveedor WHERE idProveedor=_idProveedor);
 	SET _ahora =  CONCAT(_idProveedor,',', _nombre,',', _direccion,',', _telefono,',',_email,',', _logo);
-	
-UPDATE proveedor 
+
+UPDATE proveedor
 	SET
-	nombreProveedor = _nombre , 
-	direccionProveedor = _direccion , 
-	telefonoProveedor = _telefono , 
-	emailProveedor = _email , 
+	nombreProveedor = _nombre ,
+	direccionProveedor = _direccion ,
+	telefonoProveedor = _telefono ,
+	emailProveedor = _email ,
 	logoProveedor = _logo
-	
+
 	WHERE
 	idProveedor = _id;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
     END */$$
 DELIMITER ;
@@ -1636,49 +1636,49 @@ BEGIN
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
 	DECLARE _tipoUsuario INT;
-	
+
 	SET _tipoUsuario = (SELECT CONCAT(idTipoUsuario) FROM usuario WHERE idUsuario = _id);
-	
+
 	IF _tipoUsuario = 1
 	THEN
 	SET _accion = 'Modificar Administrador';
-	SET _tabla = 'Administrador';	
+	SET _tabla = 'Administrador';
 	ELSE
-	
+
 	IF _tipoUsuario = 2
 	THEN
 	SET _accion = 'Modificar Cajero';
-	SET _tabla = 'Cajero';	
+	SET _tabla = 'Cajero';
 	ELSE
-	
+
 	SET _accion = 'Modificar Cliente';
-	SET _tabla = 'Cliente';	
-	
+	SET _tabla = 'Cliente';
+
 	END IF;
-	
+
 	END IF;
-	
+
 	SET _campos = CONCAT('Cedula',',', 'nombres',',', 'apellidos',',', 'direccion',',', 'telefono',',', 'email',',', 'nick',',', 'pass',',', 'imagen');
 	SET _antes =  (SELECT CONCAT(idUsuario,',',nombresUsuario,',',apellidosUsuario,',',direccionUsuario,',',telefonoUsuario,',',emailUsuario,',',nickUsuario,
 	',',passUsuario,',',imagenUsuario) FROM usuario WHERE idUsuario=_id);
 	SET _ahora =  CONCAT(_id,',', _nombres,',', _apellidos,',', _direccion,',',_telefono,',', _email,',', _nick,',', _pass,',', _imagen);
-	
-	UPDATE usuario 
+
+	UPDATE usuario
 	SET
-	nombresUsuario = _nombres , 
-	apellidosUsuario = _apellidos , 
-	direccionUsuario = _direccion , 
-	telefonoUsuario = _telefono , 
-	emailUsuario = _email , 
-	nickUsuario = _nick , 
-	passUsuario = _pass , 
+	nombresUsuario = _nombres ,
+	apellidosUsuario = _apellidos ,
+	direccionUsuario = _direccion ,
+	telefonoUsuario = _telefono ,
+	emailUsuario = _email ,
+	nickUsuario = _nick ,
+	passUsuario = _pass ,
 	imagenUsuario = _imagen
-	
+
 	WHERE
 	idUsuario = _id ;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
@@ -1690,14 +1690,14 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_MostrarCarrito`(in _idCliente VARCHAR(50))
 BEGIN
-	
-	SELECT p.idProducto,fp.idPedido, pr.nombreProveedor,p.nombreProducto, p.descripcionProducto, pp.precioProductoV, pp.cantidadProducto,fp.unidadesProducto, 
-	pp.precioProductoV*fp.unidadesProducto AS totalProducto, pe.fechaPedido, ep.estadoPedido FROM pedido_producto fp 
-	INNER JOIN producto p INNER JOIN producto_proveedor pp INNER JOIN proveedor pr inner join pedido pe inner join estadoPedido ep ON fp.idProveedor=pr.idProveedor AND 
+
+	SELECT p.idProducto,fp.idPedido, pr.nombreProveedor,p.nombreProducto, p.descripcionProducto, pp.precioProductoV, pp.cantidadProducto,fp.unidadesProducto,
+	pp.precioProductoV*fp.unidadesProducto AS totalProducto, pe.fechaPedido, ep.estadoPedido FROM pedido_producto fp
+	INNER JOIN producto p INNER JOIN producto_proveedor pp INNER JOIN proveedor pr inner join pedido pe inner join estadoPedido ep ON fp.idProveedor=pr.idProveedor AND
 	pp.idProveedor=pr.idProveedor AND fp.idProducto=p.idProducto AND pp.idProducto=p.idProducto and fp.idCliente = _idCliente and fp.idPedido=pe.idPedido and
 	pe.idEstadoPedido=ep.idEstadoPedido;
-	
-	
+
+
     END */$$
 DELIMITER ;
 
@@ -1709,9 +1709,9 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_MostrarCarritoCajero`(IN _idCliente VARCHAR(50))
 BEGIN
-	SELECT fp.idPedido, pr.nombreProveedor,p.nombreProducto, p.descripcionProducto, pp.precioProductoV, pp.cantidadProducto,fp.unidadesProducto, 
-	pp.precioProductoV*fp.unidadesProducto AS totalProducto, pe.fechaPedido, ep.estadoPedido FROM pedido_producto fp 
-	INNER JOIN producto p INNER JOIN producto_proveedor pp INNER JOIN proveedor pr INNER JOIN pedido pe INNER JOIN estadoPedido ep ON fp.idProveedor=pr.idProveedor AND 
+	SELECT fp.idPedido, pr.nombreProveedor,p.nombreProducto, p.descripcionProducto, pp.precioProductoV, pp.cantidadProducto,fp.unidadesProducto,
+	pp.precioProductoV*fp.unidadesProducto AS totalProducto, pe.fechaPedido, ep.estadoPedido FROM pedido_producto fp
+	INNER JOIN producto p INNER JOIN producto_proveedor pp INNER JOIN proveedor pr INNER JOIN pedido pe INNER JOIN estadoPedido ep ON fp.idProveedor=pr.idProveedor AND
 	pp.idProveedor=pr.idProveedor AND fp.idProducto=p.idProducto AND pp.idProducto=p.idProducto AND fp.idCliente = _idCliente AND fp.idPedido=pe.idPedido AND
 	pe.idEstadoPedido=ep.idEstadoPedido and pe.idEstadoPedido=1 order by pe.fechaPedido;
     END */$$
@@ -1736,10 +1736,10 @@ BEGIN
 			pp.cantidadProducto
 		FROM
 			producto p, producto_proveedor pp, proveedor pr
-			
+
 			where p.idProducto=pp.idProducto and pp.idProveedor = pr.idProveedor
-		
-			
+
+
 		ORDER BY
 			2 ASC;
 	ELSE
@@ -1752,12 +1752,12 @@ BEGIN
 			pp.cantidadProducto
 			from
 		producto p, producto_proveedor pp, proveedor pr
-			
+
 			WHERE p.idProducto=pp.idProducto AND pp.idProveedor = pr.idProveedor and
 			LOWER(p.nombreProducto) LIKE CONCAT('%',LOWER(_filtro),'%');
-			
+
 	END IF;
-			
+
     END */$$
 DELIMITER ;
 
@@ -1781,7 +1781,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SeleccionarProveedor`(in _idProducto int)
 BEGIN
-	SELECT 0 as idProveedor,'--Seleccionar--' as nombreProveedor union all SELECT pp.idProveedor,pr.nombreProveedor FROM producto_proveedor pp INNER JOIN proveedor pr ON pp.idProducto=_idProducto AND pp.idProveedor=pr.idProveedor; 
+	SELECT 0 as idProveedor,'--Seleccionar--' as nombreProveedor union all SELECT pp.idProveedor,pr.nombreProveedor FROM producto_proveedor pp INNER JOIN proveedor pr ON pp.idProducto=_idProducto AND pp.idProveedor=pr.idProveedor;
     END */$$
 DELIMITER ;
 
@@ -1806,7 +1806,7 @@ DELIMITER $$
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_traerIdioma`()
 BEGIN
 SELECT * from idiomas;
-   
+
    END */$$
 DELIMITER ;
 
@@ -1819,7 +1819,7 @@ DELIMITER $$
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_TRAER_FORMULARIOS`()
 BEGIN
 SELECT * FROM forms;
-   
+
    END */$$
 DELIMITER ;
 
@@ -1843,25 +1843,25 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_pedidoproducto`(in _id int, IN _idProducto INT,IN _idProveedor INT,IN _cantidad INT,IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
-	
+
+
 	DECLARE id_pp INT;
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Eleccion Producto';
 	SET _tabla = 'Cliente';
 	SET _campos = CONCAT('idCliente',',', 'idProducto',',', 'idProveedor',',','unidadesProducto');
 	SET _antes =  ('');
 	SET _ahora =  CONCAT(_id,',', _idProducto,',', _idProveedor,',',_cantidad);
-	
+
 	SET id_pp = (SELECT CASE WHEN COUNT(idPedido) > 0 THEN (MAX(idPedido)+1) ELSE 1 END FROM pedido_producto);
-	
-	
-INSERT INTO pedido_producto 
+
+
+INSERT INTO pedido_producto
 	(
 	idPedido,
 	idCliente,
@@ -1877,21 +1877,21 @@ INSERT INTO pedido_producto
 	_idProveedor,
 	_cantidad
 	);
-	
+
 	insert into pedido
 	 (idPedido,idCliente,fechaPedido,idEstadoPedido)values (id_pp,_id,CURRENT_TIMESTAMP,2);
-	 
-	 
-UPDATE producto_proveedor 
+
+
+UPDATE producto_proveedor
 	SET
 	cantidadProducto = cantidadProducto - _cantidad
-	
+
 	WHERE
 	idProducto = _idProducto and
 	idProveedor = _idProveedor;
-	
+
 CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
@@ -1903,24 +1903,24 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_pedidoproductoCajero`(in _id int, IN _idProducto INT,IN _idProveedor INT,IN _cantidad INT,IN _usser TEXT, IN _ip TEXT, IN _mac TEXT)
 BEGIN
-    
-	
+
+
 	DECLARE id_pp INT;
 	DECLARE _accion VARCHAR(30);
 	DECLARE _tabla VARCHAR(50);
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	SET _accion = 'Eleccion Producto';
 	SET _tabla = 'Cajero';
 	SET _campos = CONCAT('idCliente',',', 'idProducto',',', 'idProveedor',',','unidadesProducto');
 	SET _antes =  ('');
 	SET _ahora =  CONCAT(_id,',', _idProducto,',', _idProveedor,',',_cantidad);
-	
+
 	SET id_pp = (SELECT CASE WHEN COUNT(idPedido) > 0 THEN (MAX(idPedido)+1) ELSE 1 END FROM pedido_producto);
-	
-INSERT INTO pedido_producto 
+
+INSERT INTO pedido_producto
 	(
 	idPedido,
 	idCliente,
@@ -1938,18 +1938,18 @@ INSERT INTO pedido_producto
 	);
 	insert into pedido
 	 (idPedido,idCliente,fechaPedido,idEstadoPedido)values (id_pp,_id,CURRENT_TIMESTAMP,1);
-	 
-	 
-UPDATE producto_proveedor 
+
+
+UPDATE producto_proveedor
 	SET
 	cantidadProducto = cantidadProducto - _cantidad
-	
+
 	WHERE
 	idProducto = _idProducto and
 	idProveedor = _idProveedor;
-	
+
 CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
@@ -1961,7 +1961,7 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_Utilidad`()
 BEGIN
-	SELECT p.idProducto as id, pr.nombreProveedor, p.nombreProducto, pp.precioProductoV as precioVenta, pp.precioProducto as precioCompra from producto p 
+	SELECT p.idProducto as id, pr.nombreProveedor, p.nombreProducto, pp.precioProductoV as precioVenta, pp.precioProducto as precioCompra from producto p
 	inner join producto_proveedor pp inner JOIN proveedor pr on p.idProducto=pp.idProducto and pr.idProveedor=pp.idProveedor;
     END */$$
 DELIMITER ;
@@ -1980,64 +1980,64 @@ BEGIN
 	DECLARE _campos VARCHAR(1000);
 	DECLARE _antes VARCHAR(1000);
 	DECLARE _ahora VARCHAR(1000);
-	
+
 	DECLARE _idCliente INT;
 	declare _idProducto int;
 	declare _idProveedor int;
 	declare _cantidad int;
 	DECLARE _fechaReserva DATETIME;
-	
+
 	SET _accion = 'Vender Pedido';
 	SET _tabla = 'cajero';
 	SET _campos = CONCAT('idCajero',',','idCliente',',','idProducto',',', 'idProveedor',',','unidadesProducto');
 	SET _antes =  ('');
 	SET _ahora =  (SELECT CONCAT(_id,',',idCliente,',',idProducto,',', idProveedor,',',unidadesProducto) from pedido_producto where idPedido=_idPedido);
-	
+
 	SET _idCliente = (SELECT idCliente FROM pedido_producto WHERE idPedido=_idPedido);
 	set _idProducto = (SELECT idProducto FROM pedido_producto WHERE idPedido=_idPedido);
 	SET _idProveedor = (SELECT idProveedor FROM pedido_producto WHERE idPedido=_idPedido);
 	SET _cantidad = (SELECT unidadesProducto FROM pedido_producto WHERE idPedido=_idPedido);
 	set _fechaReserva = (SELECT fechaPedido FROM pedido WHERE idPedido=_idPedido);
-	
+
 	SET id_f = (SELECT CASE WHEN COUNT(idFactura) > 0 THEN (MAX(idFactura)+1 ) ELSE 1 END FROM factura_pedido);
-	
-	
-	INSERT INTO factura_pedido 
-	(idFactura, 
-	idCliente, 
-	idProveedor, 
-	idProducto, 
+
+
+	INSERT INTO factura_pedido
+	(idFactura,
+	idCliente,
+	idProveedor,
+	idProducto,
 	unidadesProducto
 	)
 	VALUES
-	(id_f, 
-	_idCliente, 
-	_idProveedor, 
-	_idProducto, 
+	(id_f,
+	_idCliente,
+	_idProveedor,
+	_idProducto,
 	_cantidad
 	);
-	
-	INSERT INTO factura 
-	(idFactura, 
-	idVendedor, 
-	idCliente, 
-	fechaReserva, 
+
+	INSERT INTO factura
+	(idFactura,
+	idVendedor,
+	idCliente,
+	fechaReserva,
 	fechaEntrega
 	)
 	VALUES
-	(id_f, 
-	_id, 
-	_idCliente, 
-	_fechaReserva, 
+	(id_f,
+	_id,
+	_idCliente,
+	_fechaReserva,
 	CURRENT_TIMESTAMP
 	);
-	
+
 	DELETE from pedido_producto where idPedido=_idPedido;
-	
+
 	DELETE FROM pedido WHERE idPedido=_idPedido;
-	
+
 	CALL sp_seguridad(_accion,_usser,_tabla,_id,_ip,_mac,_campos,_antes,_ahora);
-	
+
     END */$$
 DELIMITER ;
 
